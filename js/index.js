@@ -1,3 +1,7 @@
+navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position);
+})
+
 const diaSemana = document.getElementById("diaSemana");
 const diaMesAno = document.getElementById("diaMesAno");
 const horario = document.getElementById("horario");
@@ -5,6 +9,25 @@ const horario = document.getElementById("horario");
 diaMesAno.textContent = getCurrentDate();
 horario.textContent = getCurrentTime();
 diaSemana.textContent = getCurrentWeekDay();
+
+const btnBaterPonto = document.getElementById("btnBaterPonto");
+btnBaterPonto.addEventListener("click", () => {
+    dialog.showModal();
+});
+
+const btnFechar = document.getElementById("btnFechar");
+btnFechar.addEventListener("click", () => {
+    dialog.close();
+});
+
+const dialogData = document.getElementById("dialog-data");
+dialogData.textContent = "Data: " + getCurrentDate();
+
+
+const dialogHora = document.getElementById("dialog-hora");
+dialogHora.textContent = getCurrentTime();
+
+
 
 function getCurrentDate() {
     const date = new Date();
@@ -47,3 +70,12 @@ function getCurrentTime() {
 setInterval(() => {
     horario.textContent = getCurrentTime();
 }, 1000);
+setInterval(() => {
+    if(dialog.open){
+    dialogHora.textContent = "Hora: " + getCurrentTime();
+    }
+}, 1000);
+
+function alarm() {
+    alert("Ponto batido")
+}
