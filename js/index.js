@@ -1,7 +1,3 @@
-navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position);
-})
-
 const diaSemana = document.getElementById("diaSemana");
 const diaMesAno = document.getElementById("diaMesAno");
 const horario = document.getElementById("horario");
@@ -15,10 +11,37 @@ btnBaterPonto.addEventListener("click", () => {
     dialog.showModal();
 });
 
+const btnRegistrar = document.getElementById("btnRegistrar");
+btnRegistrar.addEventListener("click", () => {
+    Register();
+    dialog.close();
+});
+
 const btnFechar = document.getElementById("btnFechar");
 btnFechar.addEventListener("click", () => {
     dialog.close();
 });
+
+function Register(){
+    navigator.geolocation.getCurrentPosition((position) => {
+    const latitude = position.coords.latitude
+    const longitude = position.coords.longitude
+        let ponto = {
+            "data" : getCurrentDate(),
+            "hora": getCurrentTime(),
+            "latitude" : latitude,
+            "longitude" : longitude,
+            "id" : 1,
+            "tipo" : document.getElementById("tipos-pontos").value
+        }
+        console.log(ponto);
+        saveRegisterLocalStorage(ponto);
+    });
+}
+
+function saveRegisterLocalStorage(register){
+    localStorage.setItem("register", register);
+}
 
 const dialogData = document.getElementById("dialog-data");
 dialogData.textContent = "Data: " + getCurrentDate();

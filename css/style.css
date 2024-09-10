@@ -8,3 +8,18 @@
     padding: 5px;
     cursor: pointer;
 }
+#btnRegistrar{
+    background-color: aqua;
+}
+dialog{
+   padding: 100px;
+}
+#dialog-hora{
+    font-size: larger;
+}
+#dialog-data{
+    font-size: larger;
+}
+#tipos-pontos{
+    padding: 10px;
+}
