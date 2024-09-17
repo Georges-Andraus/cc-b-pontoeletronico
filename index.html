@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de controle de ponto</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    
     <link rel="stylesheet" href="css/style.css">
-   
+
+    <link rel="stylesheet" href="css/clock.css">
+
 </head>
 <body>
     <div class="data-hora">
         <p id="diaSemana">Segunda-feira</p>
         <p id="diaMesAno">26/08/2024</p>
-        <p id="horario">08.34.24</p>
+        <p id="horario">08:34:24</p>
     </div>
     <button id="btnBaterPonto">Bater Ponto</button> 
     <dialog id="dialog">
@@ -26,18 +30,50 @@
         <button id="btnRegistrar">Registrar Ponto</button>
         <button id="btnFechar" class="btnFechar"> X </button>
     </dialog>
+    
+
+    <section class="clock container">
+        <div class="clock__container grid">
+            <div class="clock__content grid">
+                <div class="clock__circle">
+                    <span class="clock__twelve"></span>
+                    <span class="clock__three"></span>
+                    <span class="clock__six"></span>
+                    <span class="clock__nine"></span>
+
+                    <div class="clock__rounder"></div>
+                    <div class="clock__hour" id="clock-hour"></div>
+                    <div class="clock__minutes" id="clock-minutes"></div>
+                    <div class="clock__seconds" id="clock-seconds"></div>
+
+                    <!-- Dark/light button -->
+                    <div class="clock__theme">
+                        <i class='bx bxs-moon' id="theme-button"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="clock__text">
+                        <div class="clock__text-hour" id="text-hour"></div>
+                        <div class="clock__text-minutes" id="text-minutes"></div>
+                        <div class="clock__text-ampm" id="text-ampm"></div>
+                    </div>
+
+                    <div class="clock__date">
+                        <!-- <span id="date-day-week"></span> -->
+                        <span id="date-day"></span>
+                        <span id="date-month"></span>
+                        <span id="date-year"></span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!--==================== MAIN JS ====================-->
+    <script src="js/clock.js"></script>
     <script src="js/index.js"></script>
+
 </body> 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

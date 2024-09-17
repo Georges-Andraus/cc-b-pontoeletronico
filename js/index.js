@@ -1,56 +1,61 @@
 const diaSemana = document.getElementById("diaSemana");
 const diaMesAno = document.getElementById("diaMesAno");
 const horario = document.getElementById("horario");
+const dialog = document.getElementById("dialog");
+const btnBaterPonto = document.getElementById("btnBaterPonto");
+const btnRegistrar = document.getElementById("btnRegistrar");
+const btnFechar = document.getElementById("btnFechar");
+const dialogData = document.getElementById("dialog-data");
+const dialogHora = document.getElementById("dialog-hora");
 
+// Initialize the date and time
 diaMesAno.textContent = getCurrentDate();
 horario.textContent = getCurrentTime();
 diaSemana.textContent = getCurrentWeekDay();
 
-const btnBaterPonto = document.getElementById("btnBaterPonto");
 btnBaterPonto.addEventListener("click", () => {
     dialog.showModal();
+    dialogData.textContent = "Data: " + getCurrentDate();
+    dialogHora.textContent = "Hora: " + getCurrentTime();
 });
 
-const btnRegistrar = document.getElementById("btnRegistrar");
 btnRegistrar.addEventListener("click", () => {
     Register();
     dialog.close();
 });
 
-const btnFechar = document.getElementById("btnFechar");
 btnFechar.addEventListener("click", () => {
     dialog.close();
 });
 
-function Register(){
+function Register() {
     navigator.geolocation.getCurrentPosition((position) => {
-    const latitude = position.coords.latitude
-    const longitude = position.coords.longitude
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
         let ponto = {
-            "data" : getCurrentDate(),
+            "data": getCurrentDate(),
             "hora": getCurrentTime(),
-            "latitude" : latitude,
-            "longitude" : longitude,
-            "id" : 1,
-            "tipo" : document.getElementById("tipos-pontos").value
-        }
+            "latitude": latitude,
+            "longitude": longitude,
+            "id": 1,
+            "tipo": document.getElementById("tipos-pontos").value
+        };
         console.log(ponto);
         saveRegisterLocalStorage(ponto);
     });
 }
 
-function saveRegisterLocalStorage(register){
-    localStorage.setItem("register", register);
+function saveRegisterLocalStorage(register) {
+    localStorage.setItem("register", JSON.stringify(register));
 }
 
-const dialogData = document.getElementById("dialog-data");
-dialogData.textContent = "Data: " + getCurrentDate();
-
-
-const dialogHora = document.getElementById("dialog-hora");
-dialogHora.textContent = getCurrentTime();
-
-
+// Update the time every second
+setInterval(() => {
+    horario.textContent = getCurrentTime();
+    if (dialog.open) {
+        dialogHora.textContent = "Hora: " + getCurrentTime();
+    }
+}, 1000);
 
 function getCurrentDate() {
     const date = new Date();
@@ -75,30 +80,9 @@ function getCurrentTime() {
     let minutes = date.getMinutes();
     let seconds = date.getSeconds();
 
-    // Adiciona zero à esquerda se necessário
-    if (hours < 10) {
-        hours = "0" + hours;
-    }
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }
+    if (hours < 10) hours = "0" + hours;
+    if (minutes < 10) minutes = "0" + minutes;
+    if (seconds < 10) seconds = "0" + seconds;
 
     return hours + ":" + minutes + ":" + seconds;
-}
-
-// Atualiza a hora a cada 1000 milissegundos (1 segundo)
-setInterval(() => {
-    horario.textContent = getCurrentTime();
-}, 1000);
-setInterval(() => {
-    if(dialog.open){
-    dialogHora.textContent = "Hora: " + getCurrentTime();
-    }
-}, 1000);
-
-function alarm() {
-    alert("Ponto batido")
 }
