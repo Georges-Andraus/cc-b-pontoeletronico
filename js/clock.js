@@ -1,108 +1,142 @@
-/*==================== CLOCK ====================*/
-const hour = document.getElementById('clock-hour'),
-      minutes = document.getElementById('clock-minutes'),
-      seconds = document.getElementById('clock-seconds')
+document.addEventListener('DOMContentLoaded', () => {
+    /*==================== CLOCK ====================*/
+    const hour = document.getElementById('clock-hour'),
+        minutes = document.getElementById('clock-minutes'),
+        seconds = document.getElementById('clock-seconds');
 
-const clock = () =>{
-    let date = new Date()
+    const clock = () => {
+        let date = new Date();
 
-    let hh = date.getHours() * 30,
-        mm = date.getMinutes() * 6,
-        ss = date.getSeconds() * 6
-        
-    // We add a rotation to the elements
-    hour.style.transform = `rotateZ(${hh + mm / 12}deg)`
-    minutes.style.transform = `rotateZ(${mm}deg)`
-    seconds.style.transform = `rotateZ(${ss}deg)`
-}
-setInterval(clock, 1000) // 1000 = 1s
+        let hh = date.getHours() * 30,
+            mm = date.getMinutes() * 6,
+            ss = date.getSeconds() * 6;
 
-/*==================== CLOCK & DATE TEXT ====================*/
-const textHour = document.getElementById('text-hour'),
-      textMinutes = document.getElementById('text-minutes'),
-      textAmPm = document.getElementById('text-ampm'),
-    //   dateWeek = document.getElementById('date-day-week'),
-      dateDay = document.getElementById('date-day'),
-      dateMonth = document.getElementById('date-month'),
-      dateYear = document.getElementById('date-year')
+        // We add a rotation to the elements
+        hour.style.transform = `rotateZ(${hh + mm / 12}deg)`;
+        minutes.style.transform = `rotateZ(${mm}deg)`;
+        seconds.style.transform = `rotateZ(${ss}deg)`;
+    };
+    setInterval(clock, 1000); // 1000 = 1s
 
-const clockText = () =>{
-    let date = new Date()
+    /*==================== CLOCK & DATE TEXT ====================*/
+    const textHour = document.getElementById('text-hour'),
+        textMinutes = document.getElementById('text-minutes'),
+        textAmPm = document.getElementById('text-ampm'),
+        dateDay = document.getElementById('date-day'),
+        dateMonth = document.getElementById('date-month'),
+        dateYear = document.getElementById('date-year');
 
-    let hh = date.getHours(),
-        ampm,
-        mm = date.getMinutes(),
-        day = date.getDate(),
-        // dayweek = date.getDay(),
-        month = date.getMonth(),
-        year = date.getFullYear()
+    const clockText = () => {
+        let date = new Date();
 
-    // We change the hours from 24 to 12 hours and establish whether it is AM or PM
-    if(hh >= 12){
-        hh = hh - 12
-        ampm = 'PM'
-    }else{
-        ampm = 'AM'
+        let hh = date.getHours(),
+            ampm,
+            mm = date.getMinutes(),
+            day = date.getDate(),
+            month = date.getMonth(),
+            year = date.getFullYear();
+
+        if (hh >= 12) {
+            hh = hh - 12;
+            ampm = 'PM';
+        } else {
+            ampm = 'AM';
+        }
+
+        if (hh === 0) { hh = 12; }
+        if (hh < 10) { hh = `0${hh}`; }
+        textHour.innerHTML = `${hh}:`;
+
+        if (mm < 10) { mm = `0${mm}`; }
+        textMinutes.innerHTML = mm;
+        textAmPm.innerHTML = ampm;
+
+        let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        dateDay.innerHTML = day;
+        dateMonth.innerHTML = `${months[month]},`;
+        dateYear.innerHTML = year;
+    };
+    setInterval(clockText, 1000); // 1000 = 1s
+
+    /*==================== DARK/LIGHT THEME ====================*/
+    const themeButton = document.getElementById('theme-button');
+    const darkTheme = 'dark-theme';
+    const iconTheme = 'bxs-sun';
+
+    const selectedTheme = localStorage.getItem('selected-theme');
+    const selectedIcon = localStorage.getItem('selected-icon');
+
+    const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light';
+    const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'bxs-moon' : 'bxs-sun';
+
+    if (selectedTheme) {
+        document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme);
+        themeButton.classList[selectedIcon === 'bxs-moon' ? 'add' : 'remove'](iconTheme);
     }
 
-    // We detect when it's 0 AM and transform to 12 AM
-    if(hh == 0){hh = 12}
+    themeButton.addEventListener('click', () => {
+        document.body.classList.toggle(darkTheme);
+        themeButton.classList.toggle(iconTheme);
+        localStorage.setItem('selected-theme', getCurrentTheme());
+        localStorage.setItem('selected-icon', getCurrentIcon());
+    });
 
-    // Show a zero before hours
-    if(hh < 10){hh = `0${hh}`}
+    // Obtenha referências aos elementos do diálogo
+    const btnBaterPonto = document.getElementById('btnBaterPonto');
+    const dialog = document.getElementById('dialog');
+    const dialogData = document.getElementById('dialog-data');
+    const dialogHora = document.getElementById('dialog-hora');
+    const btnRegistrar = document.getElementById('btnRegistrar');
+    const btnFechar = document.getElementById('btnFechar');
 
-    // Show time
-    textHour.innerHTML = `${hh}:`
-    
-    // Show a zero before the minutes
-    if(mm < 10){mm = `0${mm}`}
-    
-    // Show minutes
-    textMinutes.innerHTML = mm
+    // Função para abrir o diálogo e mostrar a data e hora atuais
+    btnBaterPonto.addEventListener("click", () => {
+        dialog.showModal(); // Abre o diálogo
+        dialogData.textContent = "Data: " + getCurrentDate(); // Atualiza a data
+        dialogHora.textContent = "Hora: " + getCurrentTime(); // Atualiza a hora ao abrir
+    });
 
-    // Show am or pm
-    textAmPm.innerHTML = ampm
+    // Função para registrar o ponto e fechar o diálogo
+    btnRegistrar.addEventListener("click", () => {
+        Register(); // Certifique-se de que esta função existe
+        dialog.close(); // Fecha o diálogo
+    });
 
-    // If you want to show the name of the day of the week
-    // let week = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat']
+    // Função para fechar o diálogo sem registrar
+    btnFechar.addEventListener("click", () => {
+        dialog.close(); // Fecha o diálogo
+    });
 
-    // We get the months of the year and show it
-    let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    // Atualiza a hora do relógio e, se o diálogo estiver aberto, atualiza a hora do diálogo
+    setInterval(() => {
+        if (dialog.open) { // Verifica se o diálogo está aberto
+            dialogHora.textContent = "Hora: " + getCurrentTime(); // Atualiza a hora no diálogo
+        }
+    }, 1000);
 
-    // We show the day, the month and the year
-    dateDay.innerHTML = day
-    // dateWeek.innerHTML = `${week[dayweek]}`
-    dateMonth.innerHTML = `${months[month]},`
-    dateYear.innerHTML = year
-}
-setInterval(clockText, 1000) // 1000 = 1s
+    // Função para obter a data atual no formato DD/MM/AAAA
+    function getCurrentDate() {
+        const date = new Date();
+        return (
+            (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
+            "/" +
+            (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) +
+            "/" +
+            date.getFullYear()
+        );
+    }
 
-/*==================== DARK/LIGHT THEME ====================*/
-const themeButton = document.getElementById('theme-button')
-const darkTheme = 'dark-theme'
-const iconTheme = 'bxs-sun'
+    // Função para obter a hora atual no formato HH:MM:SS
+    function getCurrentTime() {
+        const date = new Date();
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        let seconds = date.getSeconds();
 
-// Previously selected topic (if user selected)
-const selectedTheme = localStorage.getItem('selected-theme')
-const selectedIcon = localStorage.getItem('selected-icon')
+        if (hours < 10) hours = "0" + hours;
+        if (minutes < 10) minutes = "0" + minutes;
+        if (seconds < 10) seconds = "0" + seconds;
 
-// We obtain the current theme that the interface has by validating the dark-theme class
-const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
-const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'bxs-moon' : 'bxs-sun'
-
-// We validate if the user previously chose a topic
-if (selectedTheme) {
-  // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
-  document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
-  themeButton.classList[selectedIcon === 'bxs-moon' ? 'add' : 'remove'](iconTheme)
-}
-
-// Activate / deactivate the theme manually with the button
-themeButton.addEventListener('click', () => {
-    // Add or remove the dark / icon theme
-    document.body.classList.toggle(darkTheme)
-    themeButton.classList.toggle(iconTheme)
-    // We save the theme and the current icon that the user chose
-    localStorage.setItem('selected-theme', getCurrentTheme())
-    localStorage.setItem('selected-icon', getCurrentIcon())
-})
+        return hours + ":" + minutes + ":" + seconds;
+    }
+});
