@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const clock = () => {
         let date = new Date();
-
         let hh = date.getHours() * 30,
             mm = date.getMinutes() * 6,
             ss = date.getSeconds() * 6;
@@ -28,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const clockText = () => {
         let date = new Date();
-
         let hh = date.getHours(),
             ampm,
             mm = date.getMinutes(),
@@ -113,30 +111,48 @@ document.addEventListener('DOMContentLoaded', () => {
             dialogHora.textContent = "Hora: " + getCurrentTime(); // Atualiza a hora no diálogo
         }
     }, 1000);
-
-    // Função para obter a data atual no formato DD/MM/AAAA
-    function getCurrentDate() {
-        const date = new Date();
-        return (
-            (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
-            "/" +
-            (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) +
-            "/" +
-            date.getFullYear()
-        );
-    }
-
-    // Função para obter a hora atual no formato HH:MM:SS
-    function getCurrentTime() {
-        const date = new Date();
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        let seconds = date.getSeconds();
-
-        if (hours < 10) hours = "0" + hours;
-        if (minutes < 10) minutes = "0" + minutes;
-        if (seconds < 10) seconds = "0" + seconds;
-
-        return hours + ":" + minutes + ":" + seconds;
-    }
 });
+
+// Função para obter a data atual no formato DD/MM/AAAA
+function getCurrentDate() {
+    const date = new Date();
+    return (
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) +
+        "/" +
+        (date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1) +
+        "/" +
+        date.getFullYear()
+    );
+}
+
+// Função para obter a hora atual no formato HH:MM:SS
+function getCurrentTime() {
+    const date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+
+    if (hours < 10) hours = "0" + hours;
+    if (minutes < 10) minutes = "0" + minutes;
+    if (seconds < 10) seconds = "0" + seconds;
+
+    return hours + ":" + minutes + ":" + seconds;
+}
+
+// Função para registrar o ponto
+function Register() {
+    navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        let ponto = {
+            "data": getCurrentDate(),
+            "hora": getCurrentTime(),
+            "latitude": latitude,
+            "longitude": longitude,
+            "id": 1,
+            "tipo": document.getElementById("tipos-pontos").value
+        };
+        console.log(ponto);
+        saveRegisterLocalStorage(ponto);
+    });
+}
