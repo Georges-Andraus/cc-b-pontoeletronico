@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    loadRegisters();
     /*==================== CLOCK ====================*/
     const hour = document.getElementById('clock-hour'),
         minutes = document.getElementById('clock-minutes'),
@@ -155,4 +156,18 @@ function Register() {
         console.log(ponto);
         saveRegisterLocalStorage(ponto);
     });
+}
+
+let registros = [];
+
+function saveRegisterLocalStorage(register) {
+    let registers = JSON.parse(localStorage.getItem("registers")) || [];
+    registers.push(register);
+    localStorage.setItem("registers", JSON.stringify(registers));
+    alert("Ponto registrado com sucesso!");
+}
+
+function loadRegisters() {
+    registros = JSON.parse(localStorage.getItem("registers")) || [];
+    console.log(registros);
 }
